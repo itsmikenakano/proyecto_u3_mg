@@ -34,11 +34,15 @@ public class Factura {
 	@ManyToOne
 	@JoinColumn(name = "fact_clie_id")
 	private Cliente cliente;
-	
-	@OneToMany(mappedBy = "factura", fetch = FetchType.EAGER) //Cuando se consulte una factura tambien me traiga los detalles
+
+	@OneToMany(mappedBy = "factura", fetch = FetchType.LAZY) // Cuando se consulte una factura tambien me traiga los
+																// detalles
 	private List<DetalleFactura> detalles;
-	
-	
+
+	@Override
+	public String toString() {
+		return "Factura [id=" + id + ", fecha=" + fecha + ", numero=" + numero + "]";
+	}
 
 	// SET Y GET
 	public Integer getId() {
@@ -80,7 +84,5 @@ public class Factura {
 	public void setDetalles(List<DetalleFactura> detalles) {
 		this.detalles = detalles;
 	}
-	
-	
 
 }
