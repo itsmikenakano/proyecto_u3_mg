@@ -22,10 +22,10 @@ public class CuentaBancariaRepositoryImpl implements ICuentaBancariaRepository {
 	private EntityManager entityManager;
 
 	@Override
-	@Transactional(value = TxType.MANDATORY)
+	@Transactional(value = TxType.REQUIRES_NEW)
 	public void actualizar(CuentaBancaria cuenta) {
 		this.entityManager.merge(cuenta);
-
+		//throw new RuntimeException();
 	}
 
 	@Override
