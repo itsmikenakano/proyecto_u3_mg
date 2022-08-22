@@ -29,7 +29,7 @@ public class Cliente {
 	@OneToOne
 	@JoinColumn(name = "clie_ciud_id")
 	private Ciudadano ciudadano;
-	
+
 	@OneToMany(mappedBy = "cliente")
 	private List<Factura> facturas;
 
@@ -65,7 +65,5 @@ public class Cliente {
 	public void setFacturas(List<Factura> facturas) {
 		this.facturas = facturas;
 	}
-	
-	
 
 }

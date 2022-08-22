@@ -19,4 +19,7 @@ public interface IFacturaService {
 	public List<Factura> buscarFacturaJoinWhere(Integer cantidad);
 
 	public List<Factura> buscarFacturaFetchJoin(Integer cantidad);
+
+	public void insertar(Factura f);
+
 }

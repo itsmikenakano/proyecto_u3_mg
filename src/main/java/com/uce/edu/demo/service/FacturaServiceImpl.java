@@ -58,4 +58,10 @@ public class FacturaServiceImpl implements IFacturaService {
 
 	}
 
+	@Override
+	public void insertar(Factura f) {
+		this.iFacturaRepository.insertar(f);
+		
+	}
+
 }
