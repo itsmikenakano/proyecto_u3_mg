@@ -21,5 +21,7 @@ public interface IFacturaService {
 	public List<Factura> buscarFacturaFetchJoin(Integer cantidad);
 
 	public void insertar(Factura f);
+	
+	public void procesarFactura(String cedulaCliente, String numeroFactura, List<String> codigoBarras);
 
 }

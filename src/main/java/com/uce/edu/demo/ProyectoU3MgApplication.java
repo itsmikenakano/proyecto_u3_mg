@@ -14,6 +14,7 @@ import com.uce.edu.demo.repository.modelo.Ciudadano;
 import com.uce.edu.demo.repository.modelo.Cliente;
 import com.uce.edu.demo.repository.modelo.Producto;
 import com.uce.edu.demo.service.ICiudadanoService;
+import com.uce.edu.demo.service.IGestorCompra;
 import com.uce.edu.demo.service.IHotelService;
 import com.uce.edu.demo.service.IProductoService;
 import com.uce.edu.demo.service.ITransferenciaService;
@@ -27,7 +28,7 @@ public class ProyectoU3MgApplication implements CommandLineRunner {
 	private ICiudadanoService iCiudadanoService;
 
 	@Autowired
-	private IProductoService iProductoService;
+	private IGestorCompra iGestorCompra;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProyectoU3MgApplication.class, args);
@@ -59,7 +60,7 @@ public class ProyectoU3MgApplication implements CommandLineRunner {
 		codigosBarras.add("002");
 	
 		
-		this.iProductoService.comprar("2300290992", "0001", codigosBarras);
+		this.iGestorCompra.realizarCompra("2300290992", "0001", codigosBarras);
 		
 	}
 

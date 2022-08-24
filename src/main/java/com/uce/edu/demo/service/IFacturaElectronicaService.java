@@ -6,4 +6,6 @@ public interface IFacturaElectronicaService {
 	
 	public void insertar(FacturaElectronica f);
 	
+	public void transaccionSri(String numeroFactura);
+	
 }
