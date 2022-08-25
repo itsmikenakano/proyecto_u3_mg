@@ -17,11 +17,11 @@ import com.uce.edu.demo.repository.modelo.DetalleFactura;
 import com.uce.edu.demo.repository.modelo.FacturaElectronica;
 
 @Service
-public class FacturaElectronicaServiceImpl implements IFacturaElectronicaService{
-	
+public class FacturaElectronicaServiceImpl implements IFacturaElectronicaService {
+
 	@Autowired
 	private IFacturaElectronicaRepository iFacturaElectronicaRepository;
-	
+
 	@Autowired
 	private IDetalleFacturaRepository iDetalleFacturaRepository;
 
@@ -29,28 +29,21 @@ public class FacturaElectronicaServiceImpl implements IFacturaElectronicaService
 	@Transactional(value = TxType.REQUIRED)
 	public void insertar(FacturaElectronica f) {
 		this.iFacturaElectronicaRepository.insertar(f);
-		
+
 	}
-	
+
 	@Override
 	@Transactional(value = TxType.REQUIRES_NEW)
-	public void transaccionSri(String numeroFactura) {
-		List<DetalleFactura> detalles = this.iDetalleFacturaRepository.buscarPorNumeroFactura(numeroFactura);
-		System.out.println(detalles.size());
-		// 3.Insertar la factura electrónica en el SRI
-		FacturaElectronica facturaElectronica = new FacturaElectronica();
-		facturaElectronica.setNumero(numeroFactura);
-		facturaElectronica.setFecha(LocalDateTime.now());
-		facturaElectronica.setItem(detalles.size());
-		BigDecimal montoTotal = new BigDecimal(0);
-		for (DetalleFactura d : detalles) {
-			montoTotal = montoTotal.add(d.getSubtotal());
-		}
-		facturaElectronica.setMonto(montoTotal);
+	public void procesarElectronica(String numeroFactura, Integer cantidadItems, BigDecimal monto) {
+		FacturaElectronica electronica = new FacturaElectronica();
 
-		this.iFacturaElectronicaRepository.insertar(facturaElectronica);
+		electronica.setFecha(LocalDateTime.now());
+		electronica.setMonto(monto);
+		electronica.setNumero(numeroFactura);
+		electronica.setItem(cantidadItems);
+
+		this.iFacturaElectronicaRepository.insertar(electronica);
 		throw new RuntimeException();
 	}
-
 
 }

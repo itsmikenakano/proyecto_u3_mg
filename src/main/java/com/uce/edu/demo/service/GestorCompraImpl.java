@@ -1,5 +1,6 @@
 package com.uce.edu.demo.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -9,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GestorCompraImpl implements IGestorCompra{
-	
+public class GestorCompraImpl implements IGestorCompra {
+
 	@Autowired
 	private IFacturaElectronicaService iFacturaElectronicaService;
 
@@ -20,10 +21,10 @@ public class GestorCompraImpl implements IGestorCompra{
 	@Override
 	@Transactional(value = TxType.REQUIRED)
 	public void realizarCompra(String cedulaCliente, String numeroFactura, List<String> codigoBarras) {
-		this.iFacturaService.procesarFactura(cedulaCliente, numeroFactura, codigoBarras);
-		
-		this.iFacturaElectronicaService.transaccionSri(numeroFactura);
-		
+		BigDecimal totalPagar = this.iFacturaService.procesarFactura(cedulaCliente, numeroFactura, codigoBarras);
+
+		this.iFacturaElectronicaService.procesarElectronica(numeroFactura, codigoBarras.size(), totalPagar);
+
 	}
 
 }

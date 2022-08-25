@@ -1,5 +1,6 @@
 package com.uce.edu.demo.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.uce.edu.demo.repository.IClienteRepository;
 import com.uce.edu.demo.repository.IFacturaRepository;
 import com.uce.edu.demo.repository.IProductoRepository;
+import com.uce.edu.demo.repository.modelo.Cliente;
 import com.uce.edu.demo.repository.modelo.DetalleFactura;
 import com.uce.edu.demo.repository.modelo.Factura;
 import com.uce.edu.demo.repository.modelo.Producto;
@@ -79,9 +81,8 @@ public class FacturaServiceImpl implements IFacturaService {
 
 	}
 
-	@Override
-	@Transactional(value = TxType.REQUIRES_NEW)
-	public void procesarFactura(String cedulaCliente, String numeroFactura, List<String> codigoBarras) {
+
+/*	public void procesarFactura(String cedulaCliente, String numeroFactura, List<String> codigoBarras) {
 		// 1.Crear una factura con los detalles
 		Factura factura = new Factura();
 		factura.setCliente(this.iClienteRepository.buscarPorCedula(cedulaCliente));
@@ -108,6 +109,43 @@ public class FacturaServiceImpl implements IFacturaService {
 			p.setStock(p.getStock() - 1);
 			this.iProductoRepository.actualizar(p);
 		}
+	}*/
+	@Override
+	@Transactional(value = TxType.REQUIRES_NEW)
+	public BigDecimal procesarFactura(String cedulaCliente, String numeroFactura, List<String> codigoBarras) {
+			// TODO Auto-generated method stub
+			List<DetalleFactura> listDetalleFacturas = new ArrayList<>();
+			Factura factura = new Factura();
+			Cliente cliente = this.iClienteRepository.buscarPorCedula(cedulaCliente);
+			factura.setCliente(cliente);
+			factura.setNumero(numeroFactura);
+			factura.setFecha(LocalDateTime.now());
+
+			BigDecimal monto= BigDecimal.ZERO;
+			for (String codigo : codigoBarras) {
+				Producto producto = this.iProductoRepository.buscarPorCodigoBarra(codigo);
+				DetalleFactura detalleFactura = new DetalleFactura();
+				detalleFactura.setCantidad(1);
+				detalleFactura.setProducto(producto);
+				detalleFactura.setFactura(factura);
+				detalleFactura.setSubtotal(producto.getPrecio());
+				monto = monto.add(detalleFactura.getSubtotal());
+				listDetalleFacturas.add(detalleFactura);
+				
+
+				Integer stocknuevo = producto.getStock() - 1;
+				producto.setStock(stocknuevo);
+				this.iProductoRepository.actualizar(producto);
+
+			}
+			
+			
+
+			factura.setDetalles(listDetalleFacturas);
+
+			iFacturaRepository.insertar(factura);	
+			
+			return monto;
 	}
 
 }
