@@ -1,5 +1,13 @@
 package com.uce.edu.demo.service.funcional;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
+
 import org.apache.log4j.Logger;
 
 import com.uce.edu.demo.repository.modelo.Cliente;
@@ -7,6 +15,16 @@ import com.uce.edu.demo.repository.modelo.Cliente;
 public class MainInterfacesFuncionales {
 
 	private static Logger LOG = Logger.getLogger(MainInterfacesFuncionales.class);
+	
+	public static boolean prueba(Integer numero) {
+		return numero>=3;
+	}
+	
+	public static void imprimir(String cadena) {
+		System.out.println(cadena);
+	}
+	
+	
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -28,6 +46,11 @@ public class MainInterfacesFuncionales {
 		// Metodos High Order
 		String valorCensurado = metodosHO.consumirSupplierCliente(supplierCliente);
 		LOG.info("Cliente HO Supplier: " + valorCensurado);
+		
+		//JAVA
+		LOG.info("JAVA Supplier" );
+		Stream<String> test = Stream.generate(() -> "Michael 3").limit(7);
+		test.forEach(cadena -> System.out.println(cadena));
 
 		// CONSUMER
 		// Clases
@@ -42,6 +65,10 @@ public class MainInterfacesFuncionales {
 		// Metodos High Order
 		metodosHO.consumirConsumerCliente(numero -> LOG.info("Se ha verificado la tarjete con numero: " + numero),
 				c.getNumeroTarjeta());
+		//JAVA
+		LOG.info("JAVA Consumer" );
+		List<Integer> listaNumeros=Arrays.asList(1,2,3,4,5);
+		listaNumeros.forEach(numero -> System.out.println(numero));
 
 		// PREDICATE
 		// Clases
@@ -52,11 +79,16 @@ public class MainInterfacesFuncionales {
 		IClientePredicate<Cliente> predicateCliente = cliente -> cliente.getNumeroTarjeta().replaceAll(" ", "")
 				.length() == 16;
 		LOG.info("Predicate Cliente: " + " Tarjeta Valida: " + predicateCliente.evaluar(c));
-//		
-//		// Metodos High Order
+	
+		// Metodos High Order
 		boolean validacion = metodosHO.consumirPredicateCliente(cedula -> cedula.length() == 10, "2300290992");
 		LOG.info("HO Cliente Predicate: " + validacion);
-
+		
+		//JAVA
+		LOG.info("JAVA Predicate" );
+		Stream<Integer> nuevaLista = listaNumeros.stream().filter(numero -> prueba(numero));
+		nuevaLista.forEach(numero -> System.out.println(numero));
+		
 		// FUNCTION
 		// Clases
 		IClienteFunction<Integer, String> functionClase = new ClienteFunctionImpl();
@@ -68,6 +100,27 @@ public class MainInterfacesFuncionales {
 		// Metodos High Order
 		Integer valor = metodosHO.consumirFunctionCliente(cadena -> cadena.lastIndexOf('M'), "Michael");
 		LOG.info("HO FunctionCliente : " + valor);
+		
+		//JAVA
+		LOG.info("JAVA Function" );
+		//Conversiones/cast Empleado -> EmpleadoDTO (ligero)
+		Stream<String> listaCambiada=listaNumeros.stream().map(numeroLista -> {
+			Integer valor1 = numeroLista +1;
+			String cadena = "num: " +valor1.toString();
+			return cadena;
+			});
+		
+		//Declarativa: ideas/intenciones
+		listaCambiada.forEach(valor2 -> imprimir(valor2));
+		
+		List<String> lista1=new ArrayList<>();
+		HashMap<String, String> map1= new HashMap<String, String>();
+		
+		//Imperativa: paso a paso
+//		for(String valor4: ) {
+//			imprimir(valor4);
+//		}
+		
 		// UNARYOPERATOR (FUNCTION)
 		// Clases
 		IClienteUnitaryOperator<String> unaryClienteClase = new ClienteUnaryOperatorImpl();
