@@ -17,25 +17,26 @@ public class MainStream {
 
 		List<String> listaProcesada = listaNumerosAlumnos.stream().map(numero -> convertirIdAlumno(numero))
 				.collect(Collectors.toList());
-		
+
 		listaProcesada.forEach(cadena -> System.out.println(cadena));
-		
+
 		long tiempoFinal = System.currentTimeMillis();
 
 		long tiempoTranscurrido = (tiempoFinal - tiempoInicial) / 1000;
 
 		System.out.println(tiempoTranscurrido + "segs");
+
 	}
 
 	private static String convertirIdAlumno(Integer id) {
 		try {
 			TimeUnit.MILLISECONDS.sleep(10);
-			//SUMAS
-			//RESTAS
-			//DIVI
-			//MULTI
-			//INSERT
-			//CONSULTAS
+			// SUMAS
+			// RESTAS
+			// DIVI
+			// MULTI
+			// INSERT
+			// CONSULTAS
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
